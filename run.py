@@ -108,7 +108,9 @@ def main():
     seed_everything(cfg.seed)
 
     # load raw data
-    dfs = load_data(cfg)
+    tr_path= "./train/train.parquet"
+    test_path= "./test/test.parquet"
+    dfs = load_data(tr_path, test_path)
 
     # preprocess raw data
     (

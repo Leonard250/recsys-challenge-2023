@@ -23,28 +23,40 @@ def downcast_df(df):
     df[int_columns] = df[int_columns].apply(pd.to_numeric, downcast='integer')
     return df
     
-def load_data(cfg):
-    """ Load raw data without any processing
-    """
-    test_df = None
-    train_df = None
+import pandas as pd
+import os
 
-    train_df = pd.read_parquet(cfg.train_file)
-    if cfg.test_file.endswith('.parquet'):
-        test_df = pd.read_parquet(cfg.test_file)
-    else:
-        test_df = pd.read_csv(cfg.test_file, sep='\t')
+def load_data(tr_path, te_path, downcast=False):
+    """Load raw data from parquet files with optional downcasting.
+
+    Args:
+        tr_path (str): Path to the training data parquet file.
+        te_path (str): Path to the test data parquet file.
+        downcast (bool): Whether to downcast numeric columns to save memory.
+
+    Returns:
+        tuple: A tuple containing test_df and train_df DataFrames.
+    """
+
+    # Check if files exist
+    if not os.path.exists(tr_path):
+        raise FileNotFoundError(f"Training file not found at path: {tr_path}")
+    if not os.path.exists(te_path):
+        raise FileNotFoundError(f"Test file not found at path: {te_path}")
     
-    if cfg.downcast:
+    # Load data from parquet files
+    try:
+        train_df = pd.read_parquet(tr_path)
+        test_df = pd.read_parquet(te_path)
+    except Exception as e:
+        raise RuntimeError(f"Error loading parquet files: {e}")
+
+    # Optionally downcast data types
+    if downcast:
         train_df = downcast_df(train_df)
         test_df = downcast_df(test_df)
         
-    rets = (
-        test_df,
-        train_df
-        )
-    
-    return rets
+    return test_df, train_df
 
 def preprocess(
     cfg,
