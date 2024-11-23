@@ -78,18 +78,18 @@ def predict_each_fold(cfg, train_df, valid_df, test_df, is_feat_eng=True, params
     )
     
    start_time = time.time()
-    preds = clf.predict(valid_df[features])
-    end_time = time.time()
-    inference_time = end_time - start_time
-    print(f"Inference time for {len(valid_df)} samples: {inference_time:.4f} seconds")
+   preds = clf.predict(valid_df[features])
+   end_time = time.time()
+   inference_time = end_time - start_time
+   print(f"Inference time for {len(valid_df)} samples: {inference_time:.4f} seconds")
     
-    logs = {
+   logs = {
         'Train Loss': clf.best_score['training']['binary_logloss'],
         'Valid Loss': clf.best_score['valid_1']['binary_logloss'],
         'Valid Metric': normalized_cross_entropy(valid_df[cfg.label_col], preds)
     }
 
-    return clf, preds, logs, evals, train_df, valid_df, test_df, features
+   return clf, preds, logs, evals, train_df, valid_df, test_df, features
 
 def main():
     # parse arguments
