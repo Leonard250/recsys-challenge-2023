@@ -77,7 +77,11 @@ def predict_each_fold(cfg, train_df, valid_df, test_df, is_feat_eng=True, params
             ]
     )
     
+   start_time = time.time()
     preds = clf.predict(valid_df[features])
+    end_time = time.time()
+    inference_time = end_time - start_time
+    print(f"Inference time for {len(valid_df)} samples: {inference_time:.4f} seconds")
     
     logs = {
         'Train Loss': clf.best_score['training']['binary_logloss'],
