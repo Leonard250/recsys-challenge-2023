@@ -2,7 +2,7 @@ from configs.default_config import cfg
 import os
 
 # common
-cfg.api_key = ''
+cfg.api_key = 'af28e15472d2b0ef281fdacbb101cc157ad1b80d'
 cfg.project = 'recsys-challenge-2023.lightgbm'
 cfg.user_name = 'Hyeonwoo'
 cfg.device = 'cuda' # 2
