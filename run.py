@@ -72,8 +72,8 @@ def predict_each_fold(cfg, train_df, valid_df, test_df, is_feat_eng=True, params
         params, trn_lgb_data, cfg.num_iterations, valid_sets = [trn_lgb_data, val_lgb_data], 
         categorical_feature = cfg.categorical_features, 
         callbacks = [
-            lgb.early_stopping(stopping_rounds=100), 
-            lgb.log_evaluation(period=50),
+            lgb.early_stopping(stopping_rounds=200), 
+            lgb.log_evaluation(period=100),
             lgb.record_evaluation(evals)
             ]
     )
