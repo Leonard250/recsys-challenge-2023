@@ -65,6 +65,57 @@ def save_checkpoint(model, epoch, fold, score, save_dir, is_kaggle=False):
 
 # In the predict_each_fold function, after training the model, add the save_checkpoint call
 
+def init_everything(cfg):
+    """ Init everything
+    - init environment 
+    - init project
+    - init logging
+    Args:
+        cfg: config file
+    Returns:
+        None
+    """   
+    # init project
+    version = datetime.now(timezone("Asia/Seoul")).strftime("%Y%m%d%H%M")
+    cfg.project = f'{cfg.user_name}.{cfg.project}'
+    cfg.name = f'{cfg.config}.seed{cfg.seed}'
+    
+    print(cfg.api_key)
+    # init logging
+    if not cfg.no_wandb:
+        wandb.login(key=cfg.api_key)
+        wandb.init(
+            project=cfg.project,
+            name=cfg.name,
+            config=cfg.__dict__,
+            job_type='Train',
+            )
+    os.makedirs(f'{cfg.save_dir}/{cfg.name}', exist_ok=True)
+    shutil.copy(f'configs/{cfg.config}.py', f'{cfg.save_dir}/{cfg.name}/config.py')
+
+def seed_everything(seed=42):
+    """Seed everything
+    Args:
+        seed: seed number
+    Returns:
+        None
+    """
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+
+def normalized_cross_entropy(y_true, y_pred): 
+    N = len(y_true)
+    p = sum(y_true) / N
+     
+    result = 0
+    '''
+    for true, pred in zip(y_true, y_pred):
+        result += (true * np.log(pred) + (1-true) * np.log(1-pred))
+    '''
+    result = log_loss(y_true, y_pred, normalize=False)
+    return -(1/N)*result*(1/(p*np.log(p) + (1-p)*(np.log(1-p))))
+
 
 
 def predict_each_fold(cfg, train_df, valid_df, test_df, is_feat_eng=True, params=None):
