@@ -65,6 +65,8 @@ def save_checkpoint(model, epoch, fold, score, save_dir, is_kaggle=False):
 
 # In the predict_each_fold function, after training the model, add the save_checkpoint call
 
+
+
 def predict_each_fold(cfg, train_df, valid_df, test_df, is_feat_eng=True, params=None):
     print('predict_each_fold', cfg.label_col)
     if is_feat_eng:
@@ -131,7 +133,29 @@ def predict_each_fold(cfg, train_df, valid_df, test_df, is_feat_eng=True, params
     return clf, preds, logs, evals, train_df, valid_df, test_df, features
 
 # During model training (in the main function), add a call to save checkpoints as well
-
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="recsys challenge 2023")
+    parser.add_argument(
+        '--config', required=True,
+        help="config filename")
+    parser.add_argument(
+        '--seed', type=int, default=47, 
+        help="seed (default: 47)")
+    parser.add_argument(
+        '--no_wandb', action='store_true', default=False,
+        help="no wandb (default: False)")
+    parser.add_argument(
+        '--verbose', action='store_true', default=False,
+        help="verbose or not (default: False)")
+    parser.add_argument(
+        '--device', default='0', 
+        help='cuda device, i.e. 0 or 0,1,2,3 or cpu') 
+    parser.add_argument(
+        '--smoothing', type=float, default=0.1
+    )
+    args = parser.parse_args()
+    return args
+    
 def main():
     # parse arguments and load configurations
     args = parse_arguments()
