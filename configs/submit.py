@@ -87,7 +87,7 @@ cfg.params = {'num_leaves': 451,
           'random_state': 451
          }
 
-cfg.params_full = {'num_leaves': ,
+cfg.params_full = {'num_leaves': 451,
           'min_child_weight': 0.03454472573214212,
           'feature_fraction': 0.3797454081646243,
           'bagging_fraction': 0.4181193142567742,
