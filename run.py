@@ -266,7 +266,7 @@ def main():
         clf, _, logs, evals, train_df, valid_df, test_df, features = predict_each_fold(cfg, train_df, valid_df, test_df, is_feat_eng=True, params=cfg.params)
         
         # Plot feature importance
-        ax = lgb.plot_importance(clf, max_num_features=50, figsize=(20, 20))    
+        ax = lgb.plot_importance(clf, max_num_features=60, figsize=(20, 20))    
         ax.figure.savefig(f'{cfg.save_dir}/{cfg.name}/feature_importance.png', dpi=300)
         
         # Evaluate and create the submission
