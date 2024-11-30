@@ -43,26 +43,9 @@ import wandb
 import torch
 
 # Define the function to save the model checkpoint
-def save_checkpoint(model, epoch, fold, score, save_dir, is_kaggle=False):
-    # Saving model to Kaggle (if is_kaggle is True)
-    if is_kaggle:
-        checkpoint_path = f'/kaggle/working/model_fold_{fold}_epoch_{epoch}.bin'
-    else:
-        checkpoint_path = os.path.join(save_dir, f'model_fold_{fold}_epoch_{epoch}.bin')
-    
-    # Save the model state dictionary
-    torch.save(model.state_dict(), checkpoint_path)
-    print(f"Checkpoint saved to {checkpoint_path}")
-    
-    # Log checkpoint to WandB
-    if not cfg.no_wandb:
-        wandb.log({
-            'checkpoint': wandb.Artifact(f'fold_{fold}_epoch_{epoch}', type='model', metadata={'score': score}),
-            'checkpoint_path': checkpoint_path
-        })
-    
-    return checkpoint_path
-
+def save_checkpoint(model, checkpoint_path):
+    # Save the LightGBM model using the save_model method
+    model.save_model(checkpoint_path)
 # In the predict_each_fold function, after training the model, add the save_checkpoint call
 
 def init_everything(cfg):
@@ -169,7 +152,7 @@ def predict_each_fold(cfg, train_df, valid_df, test_df, is_feat_eng=True, params
         params, trn_lgb_data, cfg.num_iterations, valid_sets = [trn_lgb_data, val_lgb_data], 
         categorical_feature = cfg.categorical_features, 
         callbacks = [
-            lgb.early_stopping(stopping_rounds=100), 
+            lgb.early_stopping(stopping_rounds=300), 
             lgb.log_evaluation(period=50),
             lgb.record_evaluation(evals)
             ]
@@ -187,6 +170,9 @@ def predict_each_fold(cfg, train_df, valid_df, test_df, is_feat_eng=True, params
 
     train_loss = evals_result['training']['binary_logloss']
     valid_loss = evals_result['valid_1']['binary_logloss']
+
+    checkpoint_path = 'model_checkpoint.txt'  # Define your checkpoint path
+    save_checkpoint(clf, checkpoint_path)
 
     # Plot learning curves
     plot_learning_curve(train_loss, valid_loss)
