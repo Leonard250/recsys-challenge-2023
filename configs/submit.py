@@ -70,36 +70,36 @@ cfg.stacking = False
 cfg.downcast = True
 cfg.use_train_valid = False # True면 성능 하락
 
-cfg.params = {'num_leaves': 491,
+cfg.params = {'num_leaves': 511,
           'min_child_weight': 0.03454472573214212,
           'feature_fraction': 0.3797454081646243,
           'bagging_fraction': 0.4181193142567742,
-          'min_data_in_leaf': 106,
+          'min_data_in_leaf': 98,
           'objective': 'binary',
           'max_depth': -1,
-          'learning_rate': 0.006883242363721497,
+          'learning_rate': 0.008383242363721497,
           "boosting_type": "gbdt",
           "bagging_seed": 11,
           "metric": 'binary_logloss',
           "verbosity": -1,
           'reg_alpha': 0.3899927210061127,
           'reg_lambda': 0.6485237330340494,
-          'random_state': 47
+          'random_state': 48
          }
 
-cfg.params_full = {'num_leaves': 491,
+cfg.params_full = {'num_leaves': 511,
           'min_child_weight': 0.03454472573214212,
           'feature_fraction': 0.3797454081646243,
           'bagging_fraction': 0.4181193142567742,
-          'min_data_in_leaf': 106,
+          'min_data_in_leaf': 98,
           'objective': 'binary',
           'max_depth': -1,
-          'learning_rate': 0.006883242363721497,
+          'learning_rate': 0.003883242363721497,
           "boosting_type": "gbdt",
           "bagging_seed": 11,
           "metric": 'rmse',
           "verbosity": -1,
           'reg_alpha': 0.3899927210061127,
           'reg_lambda': 0.6485237330340494,
-          'random_state': 47
+          'random_state': 48
          }
