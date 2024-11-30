@@ -16,7 +16,7 @@ cfg.split = "time" # time, gkfold, skfold, tscv
 cfg.save_data = False 
 
 # model
-cfg.num_iterations = 10000
+cfg.num_iterations = 50000
 
 # feature 
 cfg.cyclical_feats = False # f_1 -> day_of_week로 변환 후 재시도 (성능향상: 6.20401 -> 6.193062)
