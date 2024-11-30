@@ -115,6 +115,24 @@ def normalized_cross_entropy(y_true, y_pred):
     '''
     result = log_loss(y_true, y_pred, normalize=False)
     return -(1/N)*result*(1/(p*np.log(p) + (1-p)*(np.log(1-p))))
+    
+def plot_learning_curve(train_loss, valid_loss):
+    """
+    Plot the learning curve for training and validation loss.
+    
+    Args:
+        train_loss: List of training loss values.
+        valid_loss: List of validation loss values.
+    """
+    plt.figure(figsize=(10, 6))
+    plt.plot(train_loss, label='Training Loss', color='blue')
+    plt.plot(valid_loss, label='Validation Loss', color='orange')
+    plt.xlabel('Iteration')
+    plt.ylabel('Binary Logloss')
+    plt.title('Learning Curve')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
 
 
@@ -166,6 +184,12 @@ def predict_each_fold(cfg, train_df, valid_df, test_df, is_feat_eng=True, params
         clf, epoch=cfg.num_iterations, fold=0, score=best_valid_score, 
         save_dir=cfg.save_dir, is_kaggle=True
     )
+
+    train_loss = evals_result['training']['binary_logloss']
+    valid_loss = evals_result['valid_1']['binary_logloss']
+
+    # Plot learning curves
+    plot_learning_curve(train_loss, valid_loss)
     
     start_time = time.time()
     preds = clf.predict(valid_df[features])
